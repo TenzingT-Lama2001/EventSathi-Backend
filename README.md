@@ -1,2 +1,3 @@
-# NestJS-backend-starter
-This is a starter code which I will use for most of my project
+#Event Sathi backend
+
+This is the backend code for Event Sathi
