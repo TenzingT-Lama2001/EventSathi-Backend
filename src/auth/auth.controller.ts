@@ -1,10 +1,12 @@
 import {
   Body,
   Controller,
+  Get,
   HttpCode,
   HttpStatus,
   Post,
   Req,
+  UseGuards,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -14,6 +16,8 @@ import { ResendEmailVerificationDto } from './dto/resend-verification.dto';
 import { EmailVerificationDto } from './dto/email-verification.dto';
 import { Request } from 'express';
 import { SendAccountActivationDto } from './dto/send-account-activation.dto';
+import { GoogleAuthGuard } from 'src/guards/google-auth.guard';
+import { GetUser } from 'src/decorators/get-user.decorator';
 @ApiTags('Auth')
 @Controller('auth')
 export class AuthController {
@@ -24,6 +28,18 @@ export class AuthController {
   @HttpCode(HttpStatus.CREATED)
   async register(@Body() payload: CreateUserDto) {
     return this.authService.register(payload);
+  }
+
+  @Get('google/login')
+  @UseGuards(GoogleAuthGuard)
+  @HttpCode(HttpStatus.CREATED)
+  handleGoogleLogin() {}
+
+  @Get('google/callback')
+  @UseGuards(GoogleAuthGuard)
+  @HttpCode(HttpStatus.CREATED)
+  registerUserGoogleCallback(@GetUser() user) {
+    return { verified: true, jwt: user };
   }
 
   @Post('login')

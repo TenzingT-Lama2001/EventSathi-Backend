@@ -20,3 +20,11 @@ export const SMTP_INFO = {
   password: process.env.SMTP_PASSWORD,
   host: process.env.SMTP_HOST,
 };
+
+export const GOOGLE_STRATEGY = {
+  client_id: process.env.GOOGLE_CLIENT_ID,
+  client_secret: process.env.GOOGLE_CLIENT_SECRET,
+  callbackURL: process.env.GOOGLE_CALLBACK_URL,
+  password: process.env.GOOGLE_PASSWORD,
+  scope: ['email', 'profile'],
+};

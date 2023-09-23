@@ -15,7 +15,7 @@ import { UserPasswordHistory } from './entities/user-password-history.entity';
 import { IExtendedUser } from 'src/shared/extended-user.interface';
 import { EditUserDto } from './dto/edit-user.dto';
 import { JwtService } from '@nestjs/jwt';
-import { JWT } from 'src/config';
+import { GOOGLE_STRATEGY, JWT } from 'src/config';
 import { RoleService } from 'src/role/role.service';
 import { RoleType } from 'src/role/enum/roles.enum';
 @Injectable()
@@ -33,6 +33,29 @@ export class UsersService {
     const { password: _unused_password, ...savedUser } = await this.dataSource
       .getRepository(User)
       .save(user_info);
+    const user_role_id = await this.roleService.getRoleIdFromTitle(
+      RoleType.USER,
+    );
+    await this.roleService.saveUserRole(savedUser.id, user_role_id);
+
+    return savedUser;
+  }
+  async createUserFromGoogleProfile(data) {
+    console.log(
+      '🚀 ~ file: users.service.ts:44 ~ UsersService ~ createUserFromGoogleProfile ~ user:',
+      data._json,
+    );
+    const user = data._json;
+    const new_user: Partial<User> = {
+      email: user.email,
+      password: await argon.hash(GOOGLE_STRATEGY.password),
+      first_name: user.given_name,
+      last_name: user.family_name,
+      is_active: true,
+      is_verified: true,
+      avatar: user.picture,
+    };
+    const savedUser = await this.dataSource.getRepository(User).save(new_user);
     const user_role_id = await this.roleService.getRoleIdFromTitle(
       RoleType.USER,
     );
@@ -89,7 +112,6 @@ export class UsersService {
     await this.dataSource.getRepository(User).save(user);
     await this.otpService.deleteOtp(user.id, code, OTPType.emailVerification);
   }
-
   async initiateResetPassword(email: string) {
     const user = await this.getUserByEmail(email);
     if (!user) throw new NotFoundException("User doesn't exist");
@@ -106,7 +128,6 @@ export class UsersService {
       html,
     });
   }
-
   async initiateResendOtp(email: string) {
     const user = await this.getUserByEmail(email);
     if (!user) throw new NotFoundException("User doesn't exist");
@@ -134,7 +155,6 @@ export class UsersService {
       text: `Your Password Reset code is: ${otp.code}`,
     });
   }
-
   async validateOtp(email: string, code: string) {
     const user = await this.getUserByEmail(email);
     if (!user) throw new NotFoundException("User doesn't exist");
@@ -148,7 +168,6 @@ export class UsersService {
 
     return { message: 'OTP Validated successfully.', code };
   }
-
   async hasPreviouslyUsedThisPassword(
     user_id: string,
     password: string,
@@ -165,7 +184,6 @@ export class UsersService {
 
     return false;
   }
-
   async finalizeResetPassword(email: string, code: string, password: string) {
     const user = await this.getUserByEmail(email);
     if (!user) throw new NotFoundException("User doesn't exist");
@@ -214,7 +232,6 @@ export class UsersService {
 
     return { message: 'Password reset successfully.' };
   }
-
   async editUserProfile(
     user: IExtendedUser,
     input: EditUserDto,

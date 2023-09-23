@@ -31,10 +31,6 @@ export class AuthService {
 
   async register(input: CreateUserDto) {
     const user_row = await this.userService.getUserByEmail(input.email);
-    console.log(
-      '🚀 ~ file: auth.service.ts:31 ~ AuthService ~ register ~ user_row:',
-      user_row,
-    );
 
     if (user_row)
       throw new BadRequestException({ message: 'Email already exists.' });
@@ -58,6 +54,10 @@ export class AuthService {
     });
 
     return savedUser;
+  }
+
+  async registerUserGoogleCallback(data) {
+    return this.userService.createUserFromGoogleProfile(data);
   }
 
   async login(input: LoginDto, ip_address: string) {

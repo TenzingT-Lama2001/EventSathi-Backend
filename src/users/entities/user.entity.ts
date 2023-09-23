@@ -26,7 +26,7 @@ export class User {
   @Column({ type: 'varchar', length: 255, nullable: true })
   middle_name: string;
 
-  @Column({ type: 'varchar', length: 255 })
+  @Column({ type: 'varchar', length: 255, nullable: true })
   last_name: string;
 
   @Column({ type: 'varchar', length: 255, nullable: true })
