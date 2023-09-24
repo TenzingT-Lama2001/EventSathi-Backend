@@ -18,6 +18,7 @@ import { Request } from 'express';
 import { SendAccountActivationDto } from './dto/send-account-activation.dto';
 import { GoogleAuthGuard } from 'src/guards/google-auth.guard';
 import { GetUser } from 'src/decorators/get-user.decorator';
+
 @ApiTags('Auth')
 @Controller('auth')
 export class AuthController {
@@ -41,7 +42,17 @@ export class AuthController {
   registerUserGoogleCallback(@GetUser() user) {
     return { verified: true, jwt: user };
   }
+  // @Get('github/login')
+  // @UseGuards(GithubAuthGuard)
+  // @HttpCode(HttpStatus.CREATED)
+  // handleGithubLogin() {}
 
+  // @Get('github/callback')
+  // @UseGuards(GithubAuthGuard)
+  // @HttpCode(HttpStatus.CREATED)
+  // registerUserGithubCallback(@GetUser() user) {
+  //   return { verified: true, jwt: user };
+  // }
   @Post('login')
   @ApiOperation({ summary: 'Get access_token' })
   @HttpCode(HttpStatus.OK)

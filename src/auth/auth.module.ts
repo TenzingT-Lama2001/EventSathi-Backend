@@ -8,6 +8,7 @@ import { OtpModule } from 'src/otp/otp.module';
 import { PassportModule } from '@nestjs/passport';
 import { ActivityLogModule } from 'src/activity-log/activity-log.module';
 import { GoogleStrategy } from './strategies/google.strategy';
+import { GithubStrategy } from './strategies/github.strategy';
 
 @Module({
   imports: [
@@ -17,7 +18,7 @@ import { GoogleStrategy } from './strategies/google.strategy';
     PassportModule,
     ActivityLogModule,
   ],
-  providers: [AuthService, JwtStrategy, GoogleStrategy],
+  providers: [AuthService, JwtStrategy, GoogleStrategy, GithubStrategy],
   controllers: [AuthController],
   exports: [AuthService],
 })

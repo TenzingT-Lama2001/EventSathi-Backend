@@ -19,6 +19,11 @@ import { ResendEmailVerificationDto } from './dto/resend-verification.dto';
 import { UserPasswordHistory } from '../users/entities/user-password-history.entity';
 import { ActivityLogService } from 'src/activity-log/activity-log.service';
 import { SendAccountActivationDto } from './dto/send-account-activation.dto';
+import { User } from 'src/users/entities/user.entity';
+import {
+  githubStrategyConfig,
+  googleStrategyConfig,
+} from './strategies/strategy.interface';
 @Injectable()
 export class AuthService {
   constructor(
@@ -57,7 +62,10 @@ export class AuthService {
   }
 
   async registerUserGoogleCallback(data) {
-    return this.userService.createUserFromGoogleProfile(data);
+    return this.userService.createUserFromProfile(data, googleStrategyConfig);
+  }
+  async registerUserGithubCallback(data) {
+    return this.userService.createUserFromProfile(data, githubStrategyConfig);
   }
 
   async login(input: LoginDto, ip_address: string) {
@@ -232,5 +240,38 @@ export class AuthService {
     await this.userService.verifyEmail(email, code);
 
     return { message: 'Email has been successfully verified.' };
+  }
+  async generateAccessToken(user: User) {
+    const user_password_history_row = await this.dataSource
+      .getRepository(UserPasswordHistory)
+      .findOne({
+        where: { user_id: user.id },
+        order: { created_at: 'DESC' },
+      });
+
+    let payload: {
+      sub: string;
+      user_password_history_id: string;
+    };
+
+    if (user_password_history_row) {
+      payload = {
+        sub: user.id,
+        user_password_history_id: user_password_history_row.id,
+      };
+    } else {
+      const new_user_password_history_row = await this.dataSource
+        .getRepository(UserPasswordHistory)
+        .save({ user_id: user.id, password: user.password });
+      payload = {
+        sub: user.id,
+        user_password_history_id: new_user_password_history_row.id,
+      };
+    }
+    const access_token = await this.jwtService.signAsync(payload, {
+      expiresIn: '7d',
+      secret: JWT.secret,
+    });
+    return access_token;
   }
 }

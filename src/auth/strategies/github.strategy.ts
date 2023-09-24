@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
-import { Profile, Strategy, VerifyCallback } from 'passport-google-oauth20';
-import { GOOGLE_STRATEGY } from 'src/config';
+import { Profile, Strategy } from 'passport-github2';
+import { GITHUB_STRATEGY } from 'src/config';
 import { UsersService } from 'src/users/users.service';
 import { AuthService } from '../auth.service';
 import { DataSource } from 'typeorm';
@@ -9,7 +9,7 @@ import { JwtService } from '@nestjs/jwt';
 import { User } from 'src/users/entities/user.entity';
 
 @Injectable()
-export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
+export class GithubStrategy extends PassportStrategy(Strategy, 'github') {
   constructor(
     private readonly userService: UsersService,
     private readonly authService: AuthService,
@@ -17,9 +17,9 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
     private readonly jwtService: JwtService,
   ) {
     super({
-      clientID: GOOGLE_STRATEGY.client_id,
-      clientSecret: GOOGLE_STRATEGY.client_secret,
-      callbackURL: GOOGLE_STRATEGY.callbackURL,
+      clientID: GITHUB_STRATEGY.client_id,
+      clientSecret: GITHUB_STRATEGY.client_secret,
+      callbackURL: GITHUB_STRATEGY.callbackURL,
       scope: ['email', 'profile'],
     });
   }
@@ -27,13 +27,17 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
     _accessToken: string,
     _refreshToken: string,
     profile: Profile,
-    done: VerifyCallback,
+    done,
   ) {
+    console.log(
+      '🚀 ~ file: github.strategy.ts:32 ~ GithubStrategy ~ classGithubStrategyextendsPassportStrategy ~ profile:',
+      profile,
+    );
     try {
       // Check if the user with this email already exists in your database
       const user = await this.dataSource.getRepository(User).findOne({
         where: {
-          email: profile._json.email,
+          email: profile.emails[0].value,
         },
         select: {
           id: true,
@@ -45,7 +49,7 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
         const access_token = await this.authService.generateAccessToken(user);
         return done(null, access_token);
       } else {
-        const user = await this.authService.registerUserGoogleCallback(profile);
+        const user = await this.authService.registerUserGithubCallback(profile);
         const access_token = await this.authService.generateAccessToken(user);
         return done(null, access_token);
       }

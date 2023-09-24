@@ -15,9 +15,11 @@ import { UserPasswordHistory } from './entities/user-password-history.entity';
 import { IExtendedUser } from 'src/shared/extended-user.interface';
 import { EditUserDto } from './dto/edit-user.dto';
 import { JwtService } from '@nestjs/jwt';
-import { GOOGLE_STRATEGY, JWT } from 'src/config';
+import { JWT } from 'src/config';
 import { RoleService } from 'src/role/role.service';
 import { RoleType } from 'src/role/enum/roles.enum';
+import { StrategyConfiguration } from 'src/auth/strategies/strategy.interface';
+
 @Injectable()
 export class UsersService {
   constructor(
@@ -40,15 +42,12 @@ export class UsersService {
 
     return savedUser;
   }
-  async createUserFromGoogleProfile(data) {
-    console.log(
-      '🚀 ~ file: users.service.ts:44 ~ UsersService ~ createUserFromGoogleProfile ~ user:',
-      data._json,
-    );
+
+  async createUserFromProfile(data, strategy: StrategyConfiguration) {
     const user = data._json;
     const new_user: Partial<User> = {
       email: user.email,
-      password: await argon.hash(GOOGLE_STRATEGY.password),
+      password: await argon.hash(strategy.password),
       first_name: user.given_name,
       last_name: user.family_name,
       is_active: true,

@@ -28,3 +28,10 @@ export const GOOGLE_STRATEGY = {
   password: process.env.GOOGLE_PASSWORD,
   scope: ['email', 'profile'],
 };
+export const GITHUB_STRATEGY = {
+  client_id: process.env.GITHUB_CLIENT_ID,
+  client_secret: process.env.GITHUB_CLIENT_SECRET,
+  callbackURL: process.env.GITHUB_CALLBACK_URL,
+  password: process.env.GITHUB_PASSWORD,
+  scope: ['email', 'profile'],
+};
