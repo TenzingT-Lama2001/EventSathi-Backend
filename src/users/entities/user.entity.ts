@@ -11,6 +11,8 @@ import { UserPasswordHistory } from './user-password-history.entity';
 import { ActivityLog } from '../../activity-log/entities/activity-log.entity';
 import { Role } from '../../role/entities/role.entity';
 import { UserRole } from '../../role/entities/user-role.entity';
+import { Event } from '../../events/entities/event.entity';
+import { EventAttendee } from '../../events/entities/event-attendee.entity';
 
 @Entity('users')
 export class User {
@@ -72,4 +74,10 @@ export class User {
     cascade: true,
   })
   user_roles: UserRole[];
+
+  @OneToMany(() => Event, (e) => e.organizer)
+  events: Event[];
+
+  @OneToMany(() => EventAttendee, (ea) => ea.attendee)
+  event_attendees: EventAttendee[];
 }

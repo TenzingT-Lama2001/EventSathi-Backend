@@ -9,6 +9,8 @@ import { OtpModule } from './otp/otp.module';
 import { ActivityLogModule } from './activity-log/activity-log.module';
 import { RoleModule } from './role/role.module';
 import { ProductsModule } from './products/products.module';
+import { EventsModule } from './events/events.module';
+import { SpeakersModule } from './speakers/speakers.module';
 
 @Module({
   imports: [
@@ -19,9 +21,11 @@ import { ProductsModule } from './products/products.module';
     UsersModule,
     AuthModule,
     OtpModule,
+    SpeakersModule,
     ActivityLogModule,
     RoleModule,
     ProductsModule,
+    EventsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
