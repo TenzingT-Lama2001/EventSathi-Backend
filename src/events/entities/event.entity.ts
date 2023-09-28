@@ -7,8 +7,10 @@ import {
   JoinColumn,
   ManyToOne,
   OneToMany,
+  OneToOne,
 } from 'typeorm';
 import { EventAttendee } from './event-attendee.entity';
+import { Questionnaire } from '../../questionnaires/entities/questionnaire.entity';
 
 export enum EventLocationType {
   ONLINE = 'ONLINE',
@@ -93,6 +95,8 @@ export class Event {
   @Column({ type: 'json', nullable: true, default: [] })
   agenda: EventAgenda[]; // You can structure the agenda data as needed
 
+  @OneToOne(() => Questionnaire, (q) => q.event, { cascade: true })
+  questionnaire: Questionnaire;
   /**const agendaData = [
   {
     title: 'Session 1',

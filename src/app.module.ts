@@ -11,6 +11,7 @@ import { RoleModule } from './role/role.module';
 import { ProductsModule } from './products/products.module';
 import { EventsModule } from './events/events.module';
 import { SpeakersModule } from './speakers/speakers.module';
+import { QuestionnaireModule } from './questionnaires/questionnaires.module';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { SpeakersModule } from './speakers/speakers.module';
     SpeakersModule,
     ActivityLogModule,
     RoleModule,
+    QuestionnaireModule,
     ProductsModule,
     EventsModule,
   ],
