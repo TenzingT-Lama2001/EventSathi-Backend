@@ -2,11 +2,13 @@ import winston, { format, transports } from 'winston';
 import config from 'config';
 import { ILoggerConfig } from './logger.interface';
 import pkg from '../../package.json';
+
 const { combine, timestamp, json, errors, prettyPrint, metadata } = format;
-export class Logger {
+class Logger {
   public logger: winston.Logger;
   private readonly loggerConfig: ILoggerConfig;
   public loggerTransports: winston.transport[] = [];
+
   constructor() {
     this.loggerConfig = config.get('logger');
 
@@ -18,7 +20,7 @@ export class Logger {
     if (this.loggerConfig.transports.includes('CONSOLE')) {
       this.loggerTransports.push(new transports.Console());
     }
-    console.log(this.loggerTransports);
+
     this.logger = winston.createLogger({
       level: this.loggerConfig.level,
       defaultMeta: { service: pkg.name },
@@ -32,3 +34,5 @@ export class Logger {
     });
   }
 }
+
+export const ptLogger = new Logger().logger;

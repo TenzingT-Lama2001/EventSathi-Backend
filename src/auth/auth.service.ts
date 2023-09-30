@@ -6,20 +6,20 @@ import {
 } from '@nestjs/common';
 import { DataSource } from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
-import { UsersService } from 'src/users/users.service';
+import { UserService } from 'src/user/user.service';
 import { LoginDto } from './dto/login.dto';
 import { JWT } from 'src/config';
 import * as argon from 'argon2';
 import { JwtService } from '@nestjs/jwt';
 import { OtpService } from 'src/otp/otp.service';
-import { OTPType } from 'src/otp/entities/otp.entity';
+import { OTPType } from 'src/otp/entity/otp.entity';
 import { MailType, getMailTemplates } from 'src/helpers/templates';
 import { sendMail } from 'src/helpers/mail';
 import { ResendEmailVerificationDto } from './dto/resend-verification.dto';
-import { UserPasswordHistory } from '../users/entities/user-password-history.entity';
+import { UserPasswordHistory } from '../user/entity/user-password-history.entity';
 import { ActivityLogService } from 'src/activity-log/activity-log.service';
 import { SendAccountActivationDto } from './dto/send-account-activation.dto';
-import { User } from 'src/users/entities/user.entity';
+import { User } from 'src/user/entity/user.entity';
 import {
   githubStrategyConfig,
   googleStrategyConfig,
@@ -27,7 +27,7 @@ import {
 @Injectable()
 export class AuthService {
   constructor(
-    private userService: UsersService,
+    private userService: UserService,
     private jwtService: JwtService,
     private otpService: OtpService,
     private activityLogService: ActivityLogService,

@@ -12,9 +12,9 @@ import { PermissionGuard } from 'src/guards/permission.guard';
 import { RoleService } from './role.service';
 import { AssignRoleDto, CreateRoleDto } from './dto/role.dto';
 import { DataSource, In } from 'typeorm';
-import { User } from 'src/users/entities/user.entity';
-import { Role } from './entities/role.entity';
-import { Permission } from './entities/permission.entity';
+import { User } from 'src/user/entity/user.entity';
+import { Role } from './entity/role.entity';
+import { Permission } from './entity/permission.entity';
 import { GetUser } from 'src/decorators/get-user.decorator';
 import { IExtendedUser } from 'src/shared/extended-user.interface';
 

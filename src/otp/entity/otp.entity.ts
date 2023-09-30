@@ -8,24 +8,34 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
-@Entity('activity_log')
-export class ActivityLog {
+export enum OTPType {
+  emailVerification = 'EMAIL_VERIFICATION',
+  passwordReset = 'PASSWORD_RESET',
+  other = 'OTHER',
+  accountActivation = 'ACCOUNT_ACTIVATION',
+}
+
+@Entity('otp')
+export class OTP {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
   @Column({
-    type: 'text',
+    type: 'varchar',
+    length: 6,
   })
-  title: string;
+  code: string;
 
   @Column({
-    type: 'text',
+    type: 'enum',
+    enum: OTPType,
+    default: OTPType.other,
   })
-  ip_address: string;
+  type: OTPType;
 
-  @Column({})
+  @Column()
   userId: string;
-  @ManyToOne(() => User, (user) => user.activityLogs, {
+  @ManyToOne(() => User, (user) => user.otps, {
     onDelete: 'CASCADE',
   })
   @JoinColumn({ name: 'userId' })

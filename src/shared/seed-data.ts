@@ -1,11 +1,11 @@
-import { User } from '../users/entities/user.entity';
+import { User } from '../user/entity/user.entity';
 import { PermissionType } from '../role/enum/permissions.enum';
-import { Role } from '../role/entities/role.entity';
-import { RolePermission } from '../role/entities/role-permission.entity';
+import { Role } from '../role/entity/role.entity';
+import { RolePermission } from '../role/entity/role-permission.entity';
 import { RoleType } from '../role/enum/roles.enum';
-import { PermissionCategory } from '../role/entities/permission-category.entity';
-import { Permission } from '../role/entities/permission.entity';
-import { UserRole } from '../role/entities/user-role.entity';
+import { PermissionCategory } from '../role/entity/permission-category.entity';
+import { Permission } from '../role/entity/permission.entity';
+import { UserRole } from '../role/entity/user-role.entity';
 
 type Users = Partial<User>[];
 type Roles = Partial<Role>[];

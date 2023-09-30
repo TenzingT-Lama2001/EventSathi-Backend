@@ -1,8 +1,8 @@
 import { Injectable, BadRequestException } from '@nestjs/common';
 import { DataSource, In } from 'typeorm';
-import { RolePermission } from './entities/role-permission.entity';
-import { Role } from './entities/role.entity';
-import { UserRole } from './entities/user-role.entity';
+import { RolePermission } from './entity/role-permission.entity';
+import { Role } from './entity/role.entity';
+import { UserRole } from './entity/user-role.entity';
 import { RoleType } from './enum/roles.enum';
 import { AssignRoleDto, CreateRoleDto } from './dto/role.dto';
 

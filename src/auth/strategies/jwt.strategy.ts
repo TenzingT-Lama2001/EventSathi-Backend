@@ -3,10 +3,10 @@ import { PassportStrategy } from '@nestjs/passport';
 import { Request } from 'express';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { JWT } from 'src/config';
-import { UserPasswordHistory } from '../../users/entities/user-password-history.entity';
-import { User } from '../..//users/entities/user.entity';
+import { UserPasswordHistory } from '../../user/entity/user-password-history.entity';
+import { User } from '../../user/entity/user.entity';
 import { DataSource } from 'typeorm';
-import { UserRole } from 'src/role/entities/user-role.entity';
+import { UserRole } from 'src/role/entity/user-role.entity';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {

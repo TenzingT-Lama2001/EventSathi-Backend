@@ -7,7 +7,7 @@ import {
   Delete,
   UseGuards,
 } from '@nestjs/common';
-import { ProductsService } from './products.service';
+import { ProductService } from './products.service';
 import { JwtAuthGuard } from 'src/guards/jwt.guard';
 import { Permissions } from 'src/decorators/permission.decorator';
 import { PermissionType } from 'src/role/enum/permissions.enum';
@@ -15,8 +15,8 @@ import { PermissionGuard } from 'src/guards/permission.guard';
 
 @Controller('products')
 @UseGuards(JwtAuthGuard)
-export class ProductsController {
-  constructor(private readonly productsService: ProductsService) {}
+export class ProductController {
+  constructor(private readonly productsService: ProductService) {}
 
   @Post()
   @UseGuards(JwtAuthGuard, PermissionGuard)

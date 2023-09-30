@@ -5,7 +5,7 @@ import {
 } from '@nestjs/common';
 import { generateOTP } from 'src/helpers/utils';
 import { DataSource } from 'typeorm';
-import { OTP, OTPType } from './entities/otp.entity';
+import { OTP, OTPType } from './entity/otp.entity';
 
 @Injectable()
 export class OtpService {

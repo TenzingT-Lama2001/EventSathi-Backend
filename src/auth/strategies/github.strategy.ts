@@ -2,16 +2,16 @@ import { Injectable } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { Profile, Strategy } from 'passport-github2';
 import { GITHUB_STRATEGY } from 'src/config';
-import { UsersService } from 'src/users/users.service';
+import { UserService } from 'src/user/user.service';
 import { AuthService } from '../auth.service';
 import { DataSource } from 'typeorm';
 import { JwtService } from '@nestjs/jwt';
-import { User } from 'src/users/entities/user.entity';
+import { User } from 'src/user/entity/user.entity';
 
 @Injectable()
 export class GithubStrategy extends PassportStrategy(Strategy, 'github') {
   constructor(
-    private readonly userService: UsersService,
+    private readonly userService: UserService,
     private readonly authService: AuthService,
     private readonly dataSource: DataSource,
     private readonly jwtService: JwtService,
