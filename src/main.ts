@@ -1,19 +1,22 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import { ValidationPipe } from '@nestjs/common';
 import * as bodyParser from 'body-parser';
 import helmet from 'helmet';
 import { NODE_ENV, PORT } from './config';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-import { Logger } from '../src/logger/index';
+import { HttpExceptionFilter } from './filters/http-exception.filter';
+import { ptLogger } from 'src/logger';
+import { ValidationPipe } from './pipes/validation.pipe';
 
-const logger = new Logger().logger.child({ file: __filename });
+const logger = ptLogger.child({ file: __filename });
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
   app.use(bodyParser.json({ limit: '50mb' }));
   app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
-
+  app.setGlobalPrefix('api');
+  app.useGlobalFilters(new HttpExceptionFilter());
+  app.useGlobalPipes(new ValidationPipe());
   app.enableCors({
     origin: '*',
     credentials: true,
@@ -40,11 +43,11 @@ async function bootstrap() {
     const document = SwaggerModule.createDocument(app, config);
     SwaggerModule.setup('docs', app, document);
   }
-  app.useGlobalPipes(
-    new ValidationPipe({
-      whitelist: true,
-    }),
-  );
+  // app.useGlobalPipes(
+  //   new ValidationPipe({
+  //     whitelist: true,
+  //   }),
+  // );
 
   app.use(helmet());
   await app.listen(PORT, () => {
